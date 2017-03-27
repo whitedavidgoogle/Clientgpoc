@@ -1,4 +1,5 @@
-
+use lookup.py for ease of use
+first time run needs Redis server active and configured and to build the index for the images with the textindex.py $DIR
 # Text Detection using the Vision API
 
 ## Introduction

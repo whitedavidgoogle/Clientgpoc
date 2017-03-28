@@ -170,7 +170,7 @@ class Index:
                 for id in docs_with_word
             ])
             conjunct = conjunct & hits if conjunct else hits
-#	print(conjunct)
+
         return conjunct
 
     def print_lookup(self, *words):
@@ -180,7 +180,7 @@ class Index:
             print("No hits found.")
             return
         for i in hits:
-            print("***Image %s has text:" % i[0])
+            print("***Image %s has text: \n%s" % i)
 	
 
     def document_is_processed(self, filename):

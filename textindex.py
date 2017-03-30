@@ -180,7 +180,7 @@ class Index:
             print("No hits found.")
             return
         for i in hits:
-            print("***Image %s has text:" % i[0])
+            print("%s" % i[0])
 	
 
     def document_is_processed(self, filename):

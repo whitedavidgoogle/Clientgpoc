@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+8#!/usr/bin/env python
 # Copyright 2015 Google Inc. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -165,10 +165,10 @@ class Index:
                 word = self.stemmer.stem(word)
 
             docs_with_word = self.redis_token_client.smembers(word)
-            hits = set([
+            hits = set({
                 (id, self.redis_docs_client.get(id))
                 for id in docs_with_word
-            ])
+            })
             conjunct = conjunct & hits if conjunct else hits
 #	print(conjunct)
         return conjunct
@@ -181,7 +181,17 @@ class Index:
             return
         for i in hits:
             print("%s" % i[0])
-	
+
+    def lookuplist(self, *words):
+	hits = self.lookup(*words)
+	l = []
+	if not hits:
+		return
+	for i in hits:
+		#print "%s" % hits.keys()
+		l.append("%s" %i[0])
+	print l
+		
 
     def document_is_processed(self, filename):
         """Check whether a document (image file) has already been processed.

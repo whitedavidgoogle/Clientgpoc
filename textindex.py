@@ -191,6 +191,7 @@ class Index:
 		#print "%s" % hits.keys()
 		l.append("%s" %i[0])
 	print l
+	return l
 		
 
     def document_is_processed(self, filename):

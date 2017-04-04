@@ -21,7 +21,7 @@ def dslist(lu):
 	
 	print "for lookp to put dict in DS"
 
-class Datastoremodel.py(db.Model):
+class Datastoremodel(db.Model):
 	db.fn=StringProperty()
 	
 	entry = list.lookuplist(lu)

@@ -59,6 +59,8 @@ import nltk
 from nltk.stem.snowball import EnglishStemmer
 from oauth2client.client import GoogleCredentials
 import redis
+# added after, may not be needed when converted to appengine
+from google.cloud import datastore
 
 DISCOVERY_URL = 'https://{api}.googleapis.com/$discovery/rest?version={apiVersion}'  # noqa
 BATCH_SIZE = 10
@@ -144,11 +146,16 @@ class Index:
 
         # db 0 holds the token (words) inverted index.
         self.redis_token_client = redis.StrictRedis(db=0)
+        #self.datastore_token_client = datastore.Client(kind1?)
+        
         # db 1 holds the filename--> text mapping.
         self.redis_docs_client = redis.StrictRedis(db=1)
+        #self.datastore_docs_client = datastore.Client(kind2?)
+        
         # Do an initial check on the redis connection. If redis is not up,
         # the constructor call will fail.
         self.redis_docs_client.ping()
+        #dont need check for datastore
         self.tokenizer = tokenizer
         self.stemmer = stemmer
         self.__unique_id = 0
@@ -163,10 +170,12 @@ class Index:
 
             if self.stemmer:
                 word = self.stemmer.stem(word)
-
+			# this calls set members with word parameter when using print_lookup function 
             docs_with_word = self.redis_token_client.smembers(word)
+            #docs_with_word = self.datastore_token_client.?(word)
             hits = set({
                 (id, self.redis_docs_client.get(id))
+                #self.datastore_docs_client.get(id))
                 for id in docs_with_word
             })
             conjunct = conjunct & hits if conjunct else hits
@@ -181,17 +190,40 @@ class Index:
             return
         for i in hits:
             print("%s" % i[0])
-
-    def lookuplist(self, *words):
-	hits = self.lookup(*words)
-	l = []
-	if not hits:
-		return
-	for i in hits:
-		#print "%s" % hits.keys()
-		l.append("%s" %i[0])
-	print l
-	return l
+            
+	def random_with_N_digits(4):
+		from random import randint
+	    range_start = 10**(n-1)
+	    range_end = (10**n)-1
+	    return randint(range_start, range_end)
+	    
+	def add_aafes(client, filename):
+	    key = client.key('aafes')
+	
+	    dd = datastore.Entity(
+	        key)#, exclude_from_indexes=['description'])
+	
+	    dd.update({
+	    	'custid': random_with_N_digits
+	        'created': datetime.datetime.utcnow(),
+	        'filename': description,
+	        'honorable': True
+	    })
+	
+	    client.put(dd)
+	
+	    return dd.key
+    
+	def lookuplist(self, *words):
+		hits = self.lookup(*words)
+		l = []
+		if not hits:
+			return
+		for i in hits:
+			#print "%s" % hits.keys()
+			l.append("%s" %i[0])
+		print l
+		return l
 		
 
     def document_is_processed(self, filename):
@@ -211,7 +243,7 @@ class Index:
         """Add bookkeeping to indicate that the given file had no
         discernible text."""
         self.redis_docs_client.set(filename, '')
-
+		#self.datastore_docs_client.set(filename.'')
     def add(self, filename, document):
         """
         Add a document string to the index.
@@ -228,10 +260,10 @@ class Index:
                 token = self.stemmer.stem(token)
             # Add the filename to the set associated with the token.
             self.redis_token_client.sadd(token, filename)
-
+			#self.datastore_token_client.sadd(token,filename) No set add in DS API?
         # store the 'document text' for the filename.
         self.redis_docs_client.set(filename, document)
-
+		#self.datastore_docs_client.set(filename, document)
 
 def get_words(text):
     return re.compile('\w+').findall(text)

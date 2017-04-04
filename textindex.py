@@ -190,13 +190,16 @@ class Index:
             return
         for i in hits:
             print("%s" % i[0])
-            
-	def random_with_N_digits(4):
+    n=4
+	def random_with_N_digits(n):
 		from random import randint
 	    range_start = 10**(n-1)
 	    range_end = (10**n)-1
 	    return randint(range_start, range_end)
-	    
+	project_id='albatross-davidw-spokea'
+	def create_client(project_id):
+    	return datastore.Client(project_id)    
+	
 	def add_aafes(client, filename):
 	    key = client.key('aafes')
 	

@@ -202,14 +202,14 @@ class Index:
 	
 	def add_aafes(client, filename):
 	    key = client.key('aafes')
-	
+		n=4
 	    dd = datastore.Entity(
 	        key)#, exclude_from_indexes=['description'])
-	
+		
 	    dd.update({
-	    	'custid': random_with_N_digits
+	    	'name': random_with_N_digits(n)
 	        'created': datetime.datetime.utcnow(),
-	        'filename': description,
+	        'filename': filename,
 	        'honorable': True
 	    })
 	

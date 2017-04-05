@@ -1,8 +1,0 @@
-import lookup
-from google.cloud import datastore
-#def dsinput():
-client = datastore.Client()
-
-def output
-
-#def dsoutput():

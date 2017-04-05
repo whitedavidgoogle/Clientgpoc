@@ -1,4 +1,4 @@
-8#!/usr/bin/env python
+#!/usr/bin/env python
 # Copyright 2015 Google Inc. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -346,12 +346,20 @@ class Dstore:
 		range_end = (10**n)-1
 		return randint(range_start, range_end)
 		
+<<<<<<< HEAD
 	
 	def add_aafes(client, filename):
 	    key = client.key('aafes')
+=======
+	def create_client(project_id):
+		client = datastore.Client(project_id)    
+	
+	def add_aafes(client, filename):
+	    k = client.key('aafes')
+>>>>>>> 5a82a8e0a9fae6da7ced7b8de1127fa200188930
 		
 	    dd = datastore.Entity(
-	        key)#, exclude_from_indexes=['description'])
+	        k)#, exclude_from_indexes=['description'])
 		
 	    dd.update({
 	    	#'name' : randdigits(n),
@@ -362,4 +370,4 @@ class Dstore:
 	
 	    client.put(dd)
 	
-	    return dd.key
+	    return dd.k

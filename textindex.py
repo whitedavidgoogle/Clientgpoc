@@ -337,7 +337,7 @@ if __name__ == '__main__':
 class Dstore:
 	project_id = 'albatross-davidw-spokea'
 	n=4
-	def random_with_N_digits(n):
+	def randdigits(n):
 		from random import randint
 		range_start = 10**(n-1)
 		range_end = (10**n)-1
@@ -347,13 +347,13 @@ class Dstore:
 		return datastore.Client(project_id)    
 	
 	def add_aafes(client, filename):
-	    key = client.key('aafes')
+	    key = client.key(randdigits)
 		
 	    dd = datastore.Entity(
 	        key)#, exclude_from_indexes=['description'])
 		
 	    dd.update({
-	    	'name' : random_with_N_digits(n),
+	    	#'name' : randdigits(n),
 	        'created' : datetime.datetime.utcnow(),
 	        'filename' : filename,
 	        'honorable' : True

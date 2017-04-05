@@ -218,16 +218,16 @@ class Index:
         for i in hits:
             print("%s" % i[0])
     
-	def lookuplist(self, *words):
-		hits = self.lookup(*words)
-		l = []
-		if not hits:
-			return
-		for i in hits:
-			#print "%s" % hits.keys()
-			l.append("%s" %i[0])
-		print l
-		return l		
+    def lookuplist(self, *words):
+	hits = self.lookup(*words)
+	l = []
+	if not hits:
+		return
+	for i in hits:
+		#print "%s" % hits.keys()
+		l.append("%s" %i[0])
+	print l
+	return l		
 
     def document_is_processed(self, filename):
         """Check whether a document (image file) has already been processed.

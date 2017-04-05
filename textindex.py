@@ -160,7 +160,7 @@ class Index:
         self.stemmer = stemmer
         self.__unique_id = 0
         self.stopwords = set(stopwords) if stopwords else set()
-
+	n=4
     def lookup(self, *words):
         """Look up words in the index; return the intersection of the hits."""
         conjunct = set()
@@ -182,6 +182,33 @@ class Index:
 #	print(conjunct)
         return conjunct
 
+	def random_with_N_digits(n):
+		from random import randint
+		range_start = 10**(n-1)
+		range_end = (10**n)-1
+		return randint(range_start, range_end)
+		
+	project_id = 'albatross-davidw-spokea'
+	def create_client(project_id):
+		return datastore.Client(project_id)    
+	
+	def add_aafes(client, filename):
+	    key = client.key('aafes')
+		
+	    dd = datastore.Entity(
+	        key)#, exclude_from_indexes=['description'])
+		
+	    dd.update({
+	    	'name' : random_with_N_digits(n),
+	        'created' : datetime.datetime.utcnow(),
+	        'filename' : filename,
+	        'honorable' : True
+	    })
+	
+	    client.put(dd)
+	
+	    return dd.key
+    
     def print_lookup(self, *words):
         """Print lookup results to stdout."""
         hits = self.lookup(*words)
@@ -190,32 +217,6 @@ class Index:
             return
         for i in hits:
             print("%s" % i[0])
-    n=4
-	def random_with_N_digits(n):
-		from random import randint
-	    range_start = 10**(n-1)
-	    range_end = (10**n)-1
-	    return randint(range_start, range_end)
-	project_id='albatross-davidw-spokea'
-	def create_client(project_id):
-    	return datastore.Client(project_id)    
-	
-	def add_aafes(client, filename):
-	    key = client.key('aafes')
-		n=4
-	    dd = datastore.Entity(
-	        key)#, exclude_from_indexes=['description'])
-		
-	    dd.update({
-	    	'name': random_with_N_digits(n)
-	        'created': datetime.datetime.utcnow(),
-	        'filename': filename,
-	        'honorable': True
-	    })
-	
-	    client.put(dd)
-	
-	    return dd.key
     
 	def lookuplist(self, *words):
 		hits = self.lookup(*words)
@@ -226,8 +227,7 @@ class Index:
 			#print "%s" % hits.keys()
 			l.append("%s" %i[0])
 		print l
-		return l
-		
+		return l		
 
     def document_is_processed(self, filename):
         """Check whether a document (image file) has already been processed.
